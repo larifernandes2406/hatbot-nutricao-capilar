@@ -1,13 +1,3 @@
-from zipfile import ZipFile
-import os
-
-# Define project structure and content
-project_name = "nutritional_hair_loss_chatbot"
-base_dir = f"/mnt/data/{project_name}"
-os.makedirs(base_dir, exist_ok=True)
-
-# HTML content for chatbot interface
-html_content = """
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -25,10 +15,6 @@ html_content = """
     <script src="script.js"></script>
 </body>
 </html>
-"""
-
-# CSS content
-css_content = """
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
@@ -36,6 +22,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 .chat-container {
     background-color: white;
@@ -50,11 +37,13 @@ body {
     height: 300px;
     overflow-y: auto;
     margin-bottom: 10px;
+    background-color: #fafafa;
 }
 input, button {
     padding: 10px;
     width: calc(100% - 22px);
     margin-bottom: 10px;
+    box-sizing: border-box;
 }
 button {
     background-color: #4CAF50;
@@ -65,10 +54,6 @@ button {
 button:hover {
     background-color: #45a049;
 }
-"""
-
-# JavaScript content for chatbot logic
-js_content = """
 const questions = [
     "Você já foi diagnosticada com alguma deficiência nutricional? (Ex: Anemia ferropriva, deficiência de B12, ferro ou vitamina D)",
     "Você sofre ou já sofreu com queda de cabelo? (Sim, atualmente / Sim, já sofri / Não / Não me recordo)",
@@ -78,6 +63,7 @@ const questions = [
     "Com que frequência consome alimentos ricos em ferro, zinco, e vitaminas do complexo B? (Sempre / Às vezes / Nunca)",
     "Você faz uso de suplementos alimentares? (Sim, diariamente / Sim, ocasionalmente / Não)"
 ];
+
 const responses = [];
 let currentQuestion = 0;
 
@@ -108,24 +94,3 @@ function sendMessage() {
 window.onload = () => {
     document.getElementById('chat-box').innerHTML = "<p><strong>Chatbot:</strong> " + questions[0] + "</p>";
 };
-"""
-
-# Write files
-with open(os.path.join(base_dir, "index.html"), "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-with open(os.path.join(base_dir, "style.css"), "w", encoding="utf-8") as f:
-    f.write(css_content)
-
-with open(os.path.join(base_dir, "script.js"), "w", encoding="utf-8") as f:
-    f.write(js_content)
-
-# Create ZIP archive
-zip_path = f"/mnt/data/{project_name}.zip"
-with ZipFile(zip_path, 'w') as zipf:
-    for foldername, subfolders, filenames in os.walk(base_dir):
-        for filename in filenames:
-            file_path = os.path.join(foldername, filename)
-            zipf.write(file_path, os.path.relpath(file_path, base_dir))
-
-zip_path
